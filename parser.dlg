@@ -70,9 +70,24 @@ is
 		NLA = ASSIG;
 	>>
 
+Peak
+	<<
+		NLA = PEAK;
+	>>
+
+Valley
+	<<
+		NLA = VALLEY;
+	>>
+
 \*
 	<<
 		NLA = MULT;
+	>>
+
+\#
+	<<
+		NLA = REF;
 	>>
 
 \/
@@ -93,6 +108,21 @@ is
 \;
 	<<
 		NLA = CONC;
+	>>
+
+\,
+	<<
+		NLA = COMA;
+	>>
+
+\(
+	<<
+		NLA = OPEN;
+	>>
+
+\)
+	<<
+		NLA = CLOSE;
 	>>
 
 [a-zA-Z][a-zA-Z0-9]

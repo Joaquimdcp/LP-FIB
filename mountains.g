@@ -32,14 +32,18 @@ AST *root;
 
 // function to fill token information
 void zzcr_attr(Attrib *attr, int type, char *text) {
-  // if (type == ID) {
-  //   attr->kind = "id";
-  //   attr->text = text;
-  // }
-  // else {
+   if (type == ID) {
+     attr->kind = "id";
+     attr->text = text;
+   }
+   else if(type == NUM){
+     attr->kind = "intconst";
+     attr->text = text;
+   }
+   else {
     attr->kind = text;
     attr->text = "";
-  // }
+   }
 }
 
 // function to create a new AST node
@@ -114,15 +118,24 @@ int main() {
 #lexclass START
 #token NUM "[0-9]+"
 #token ASSIG "is"
+#token PEAK "Peak"
+#token VALLEY "Valley"
 #token MULT "\*"
+#token REF "\#"
 #token UP "\/"
 #token PLA "\-"
 #token DOWN "\\"
 #token CONC "\;"
+#token COMA "\,"
+#token OPEN "\("
+#token CLOSE "\)"
 #token ID "[a-zA-Z][a-zA-Z0-9]"
 #token SPACE "[\ \t \n]" << zzskip(); >>
 
 mount: NUM MULT^ (DOWN|UP|PLA);
+mountain: REF ID;
 expr: mount (CONC^ mount )*;
-assign: ID ASSIG^ expr;
+doublemount: mountain (CONC^ mountain)*;
+valleypeak: (PEAK^ | VALLEY^) OPEN NUM COMA NUM COMA NUM CLOSE;
+assign: ID ASSIG^ (expr | doublemount| peak | valleypeak);
 mountains: (assign | condic | draw | iter | complete)* << #0 = createASTlist(_sibling); >>;

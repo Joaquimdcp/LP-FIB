@@ -11,13 +11,19 @@
 #define zzEOF_TOKEN 1
 #define NUM 2
 #define ASSIG 3
-#define MULT 4
-#define UP 5
-#define PLA 6
-#define DOWN 7
-#define CONC 8
-#define ID 9
-#define SPACE 10
+#define PEAK 4
+#define VALLEY 5
+#define MULT 6
+#define REF 7
+#define UP 8
+#define PLA 9
+#define DOWN 10
+#define CONC 11
+#define COMA 12
+#define OPEN 13
+#define CLOSE 14
+#define ID 15
+#define SPACE 16
 
 #ifdef __USE_PROTOS
 void mount(AST**_root);
@@ -26,9 +32,27 @@ extern void mount();
 #endif
 
 #ifdef __USE_PROTOS
+void mountain(AST**_root);
+#else
+extern void mountain();
+#endif
+
+#ifdef __USE_PROTOS
 void expr(AST**_root);
 #else
 extern void expr();
+#endif
+
+#ifdef __USE_PROTOS
+void doublemount(AST**_root);
+#else
+extern void doublemount();
+#endif
+
+#ifdef __USE_PROTOS
+void valleypeak(AST**_root);
+#else
+extern void valleypeak();
 #endif
 
 #ifdef __USE_PROTOS
@@ -45,5 +69,7 @@ extern void mountains();
 
 #endif
 extern SetWordType zzerr1[];
+extern SetWordType zzerr2[];
+extern SetWordType zzerr3[];
 extern SetWordType setwd1[];
 extern SetWordType setwd2[];

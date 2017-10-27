@@ -64,14 +64,18 @@ AST *root;
 
 // function to fill token information
 void zzcr_attr(Attrib *attr, int type, char *text) {
-  // if (type == ID) {
-    //   attr->kind = "id";
-    //   attr->text = text;
-    // }
-  // else {
+  if (type == ID) {
+    attr->kind = "id";
+    attr->text = text;
+  }
+  else if(type == NUM){
+    attr->kind = "intconst";
+    attr->text = text;
+  }
+  else {
     attr->kind = text;
     attr->text = "";
-    // }
+  }
 }
 
 // function to create a new AST node
@@ -187,6 +191,29 @@ fail:
 
 void
 #ifdef __USE_PROTOS
+mountain(AST**_root)
+#else
+mountain(_root)
+AST **_root;
+#endif
+{
+  zzRULE;
+  zzBLOCK(zztasp1);
+  zzMake0;
+  {
+  zzmatch(REF); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzmatch(ID); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzEXIT(zztasp1);
+  return;
+fail:
+  zzEXIT(zztasp1);
+  zzsyn(zzMissText, zzBadTok, (ANTLRChar *)"", zzMissSet, zzMissTok, zzErrk, zzBadText);
+  zzresynch(setwd1, 0x2);
+  }
+}
+
+void
+#ifdef __USE_PROTOS
 expr(AST**_root)
 #else
 expr(_root)
@@ -215,7 +242,85 @@ AST **_root;
 fail:
   zzEXIT(zztasp1);
   zzsyn(zzMissText, zzBadTok, (ANTLRChar *)"", zzMissSet, zzMissTok, zzErrk, zzBadText);
-  zzresynch(setwd1, 0x2);
+  zzresynch(setwd1, 0x4);
+  }
+}
+
+void
+#ifdef __USE_PROTOS
+doublemount(AST**_root)
+#else
+doublemount(_root)
+AST **_root;
+#endif
+{
+  zzRULE;
+  zzBLOCK(zztasp1);
+  zzMake0;
+  {
+  mountain(zzSTR); zzlink(_root, &_sibling, &_tail);
+  {
+    zzBLOCK(zztasp2);
+    zzMake0;
+    {
+    while ( (LA(1)==CONC) ) {
+      zzmatch(CONC); zzsubroot(_root, &_sibling, &_tail); zzCONSUME;
+      mountain(zzSTR); zzlink(_root, &_sibling, &_tail);
+      zzLOOP(zztasp2);
+    }
+    zzEXIT(zztasp2);
+    }
+  }
+  zzEXIT(zztasp1);
+  return;
+fail:
+  zzEXIT(zztasp1);
+  zzsyn(zzMissText, zzBadTok, (ANTLRChar *)"", zzMissSet, zzMissTok, zzErrk, zzBadText);
+  zzresynch(setwd1, 0x8);
+  }
+}
+
+void
+#ifdef __USE_PROTOS
+valleypeak(AST**_root)
+#else
+valleypeak(_root)
+AST **_root;
+#endif
+{
+  zzRULE;
+  zzBLOCK(zztasp1);
+  zzMake0;
+  {
+  {
+    zzBLOCK(zztasp2);
+    zzMake0;
+    {
+    if ( (LA(1)==PEAK) ) {
+      zzmatch(PEAK); zzsubroot(_root, &_sibling, &_tail); zzCONSUME;
+    }
+    else {
+      if ( (LA(1)==VALLEY) ) {
+        zzmatch(VALLEY); zzsubroot(_root, &_sibling, &_tail); zzCONSUME;
+      }
+      else {zzFAIL(1,zzerr2,&zzMissSet,&zzMissText,&zzBadTok,&zzBadText,&zzErrk); goto fail;}
+    }
+    zzEXIT(zztasp2);
+    }
+  }
+  zzmatch(OPEN); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzmatch(NUM); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzmatch(COMA); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzmatch(NUM); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzmatch(COMA); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzmatch(NUM); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzmatch(CLOSE); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
+  zzEXIT(zztasp1);
+  return;
+fail:
+  zzEXIT(zztasp1);
+  zzsyn(zzMissText, zzBadTok, (ANTLRChar *)"", zzMissSet, zzMissTok, zzErrk, zzBadText);
+  zzresynch(setwd1, 0x10);
   }
 }
 
@@ -233,13 +338,37 @@ AST **_root;
   {
   zzmatch(ID); zzsubchild(_root, &_sibling, &_tail); zzCONSUME;
   zzmatch(ASSIG); zzsubroot(_root, &_sibling, &_tail); zzCONSUME;
-  expr(zzSTR); zzlink(_root, &_sibling, &_tail);
+  {
+    zzBLOCK(zztasp2);
+    zzMake0;
+    {
+    if ( (LA(1)==NUM) ) {
+      expr(zzSTR); zzlink(_root, &_sibling, &_tail);
+    }
+    else {
+      if ( (LA(1)==REF) ) {
+        doublemount(zzSTR); zzlink(_root, &_sibling, &_tail);
+      }
+      else {
+        if ( (setwd1[LA(1)]&0x20) ) {
+        }
+        else {
+          if ( (setwd1[LA(1)]&0x40) ) {
+            valleypeak(zzSTR); zzlink(_root, &_sibling, &_tail);
+          }
+          else {zzFAIL(1,zzerr3,&zzMissSet,&zzMissText,&zzBadTok,&zzBadText,&zzErrk); goto fail;}
+        }
+      }
+    }
+    zzEXIT(zztasp2);
+    }
+  }
   zzEXIT(zztasp1);
   return;
 fail:
   zzEXIT(zztasp1);
   zzsyn(zzMissText, zzBadTok, (ANTLRChar *)"", zzMissSet, zzMissTok, zzErrk, zzBadText);
-  zzresynch(setwd1, 0x4);
+  zzresynch(setwd1, 0x80);
   }
 }
 
@@ -260,21 +389,21 @@ AST **_root;
     zzMake0;
     {
     for (;;) {
-      if ( !((setwd1[LA(1)]&0x8))) break;
+      if ( !((setwd2[LA(1)]&0x1))) break;
       if ( (LA(1)==ID) ) {
         assign(zzSTR); zzlink(_root, &_sibling, &_tail);
       }
       else {
-        if ( (setwd1[LA(1)]&0x10) ) {
+        if ( (setwd2[LA(1)]&0x2) ) {
         }
         else {
-          if ( (setwd1[LA(1)]&0x20) ) {
+          if ( (setwd2[LA(1)]&0x4) ) {
           }
           else {
-            if ( (setwd1[LA(1)]&0x40) ) {
+            if ( (setwd2[LA(1)]&0x8) ) {
             }
             else {
-              if ( (setwd1[LA(1)]&0x80) ) {
+              if ( (setwd2[LA(1)]&0x10) ) {
               }
               else break; /* MR6 code for exiting loop "for sure" */
             }
@@ -292,6 +421,6 @@ AST **_root;
 fail:
   zzEXIT(zztasp1);
   zzsyn(zzMissText, zzBadTok, (ANTLRChar *)"", zzMissSet, zzMissTok, zzErrk, zzBadText);
-  zzresynch(setwd2, 0x1);
+  zzresynch(setwd2, 0x20);
   }
 }
